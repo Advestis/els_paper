@@ -11,3 +11,16 @@ Link: *soon...*<br>
 **Dataset**: https://storage.googleapis.com/neg_dataset_eu/data_set.csv
 
 **Proposed Model**: https://storage.googleapis.com/els-models/proposed_GAN_model.zip
+
+## Release notes
+
+## Requirements
+- Tensorflow 2.3.2
+- Matplotlib 3.4.1
+- GetDist 1.2.2
+- Pandas
+- Numpy
+
+## Getting started
+
+## Citation
