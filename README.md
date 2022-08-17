@@ -12,16 +12,63 @@ DOI: https://doi.org/10.1016/j.egyai.2022.100177<br>
 
 **Proposed Model**: https://storage.googleapis.com/els-models/proposed_GAN_model.zip
 
-## Release notes
+## Working example
 
-## Requirements
-- Tensorflow 2.3.2
-- Matplotlib 3.4.1
-- GetDist 1.2.2
-- Pandas
+**Requirements**
+- Tensorflow
 - Numpy
+- Pandas
+- Getdist
 
-## Getting started
+**Data generation**
+
+The pre-trained generator is publicly available for you to obtain a batch of synthetic data. In order to use it, please run the following commands within a `Python` shell or script 
+````
+    # loading pre-trained model
+    generator = tf.keras.models.load_model("~/path/to/proposed_GAN_model/generator")
+
+    # generate a batch of synthetic data
+    n_points = int(1e5)
+    latent_dim = 40
+    with tf.device('/cpu:0'):
+        noise = tf.random.normal(shape=(n_points, latent_dim))
+        gen_data = generator(noise).numpy()
+````
+The desired data will be available as Numpy array in the `gen_data` variabale.
+
+The generated data can be further deployed in the desired applications. For example, we can reproduce Fig.8 comparing them to the real dataset via the following script
+
+```
+    # loading real dataset
+    real_data = pd.read_csv("~/path/to/proposed_GAN_model/data_set.csv", index_col=0).values
+    
+    # lookig at similarity via triagular plot
+    variables_names = ['elec.load', 'elec.prices', 'gas prices', 'GDP-growth', 'population',
+                       'degree-day', 'season', 'day in week', 'night/day']
+                       
+    samples = MCSamples(samples=real_data[:, :6], names=variables_names[:6],
+                        settings={'boundary_correction_order': 0,
+                                  'mult_bias_correction_order': 0,
+                                  'smooth_scale_2D': 0.1,
+                                  'smooth_scale_1D': 0.1}
+                        )
+
+    samples2 = MCSamples(samples=gen_data[:, :6], names=variables_names[:6],
+                         settings={'boundary_correction_order': 0,
+                                   'mult_bias_correction_order': 0,
+                                   'smooth_scale_2D': 0.05,
+                                   'smooth_scale_1D': 0.1})
+    g = plots.get_subplot_plotter()
+    
+    g.triangle_plot([samples, samples2],
+                    legend_labels=['real data', 'generated data'],
+                    shaded=True,
+                    contour_colors=['blue', 'red'],
+                    contour_lws=[0.5, 1])
+
+    g.fig.savefig('fig8.pdf')
+```
+
 
 ## Citation
 ```
