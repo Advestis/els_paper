@@ -15,10 +15,10 @@ DOI: https://doi.org/10.1016/j.egyai.2022.100177<br>
 ## Working example
 
 **Requirements**
-- Tensorflow
-- Numpy
-- Pandas
-- Getdist
+- Tensorflow 2.9.1
+- Numpy 1.23.2
+- Pandas 1.4.3
+- Getdist 1.3.4
 
 **Data generation**
 
